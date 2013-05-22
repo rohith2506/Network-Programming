@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+
+struct msg{
+   long type;
+   char buf[100];
+   int i;
+};
+
+struct msg mg;
+int client[3];
+int n=3;
+int main(int argc,char *argv[]){
+     printf("This is server\n");
+     client[0]=10;
+     client[1]=20;
+     client[2]=30;
+     int key=ftok("in1",234);
+     int msgid=msgget(key,IPC_CREAT | 0666);
+    if(msgid==-1){
+      perror("message queue error\n");
+      exit(1);
+    }
+	 while(1){
+	   if(msgrcv(msgid,&mg,sizeof(struct msg)-sizeof(long),0,0)==-1){
+	        perror("file error\n");
+		exit(1);
+	   }
+	    int i;
+	    for(i=0;i<n;i++){
+	        if(mg.i!=client[i]){
+		    mg.type=client[i];
+		    msgsnd(msgid,&mg,sizeof(struct msg)-sizeof(long),0);
+		}
+	    }
+	 }
+	 return 0;
+}
+	    
+	   
+	    
+  

@@ -1,0 +1,18 @@
+Macro proc1(int a,int b,int c)
+a = b + c;
+b = c * a;
+Mend
+Macro proc2(int a,int b,int c,int d)
+a = b + c + d;
+b = c * d * a;
+Mend
+Macro proc3(int a,int b)
+a = b * b;
+b = a / b;
+Mend 
+Main
+proc1(i,j,k);
+proc1(k,l,m);
+proc2(p,q,r,s);
+return 0;
+End Main
